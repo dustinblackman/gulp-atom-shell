@@ -99,12 +99,27 @@ function renameApp(opts) {
 	});
 }
 
+function removeFiles() {
+	var pass = es.through();
+	var arr = ['version', 'LICENSE'];
+
+	var src = pass.pipe(es.mapSync(function(f) {
+		if (arr.indexOf(f.relative) === -1) {
+			return f;
+		}
+
+	}));
+
+	return es.duplex(pass, src);
+}
+
 exports.patch = function(opts) {
 	var pass = es.through();
 
 	var src = pass
 		.pipe(removeDefaultApp())
 		.pipe(patchIcon(opts))
+		.pipe(removeFiles())
 		.pipe(patchInfoPlist(opts))
 		.pipe(renameApp(opts));
 
