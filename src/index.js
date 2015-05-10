@@ -9,7 +9,7 @@ var download = require('./download');
 
 function moveApp(platform, opts) {
 	var appPath = platform.getAppPath(opts);
-	
+
 	return rename(function (path) {
 		path.dirname = appPath + (path.dirname === '.' ? '' : '/' + path.dirname);
 	});

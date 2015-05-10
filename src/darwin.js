@@ -113,6 +113,30 @@ function removeFiles() {
 	return es.duplex(pass, src);
 }
 
+function useAsar(opts) {
+	var src;
+	var pass = es.through();
+
+	if (opts.asar) {
+		var resourcesPath = path.join('Electron.app', 'Contents', 'Resources');
+		var asarPath = path.join(resourcesPath, 'app.asar');
+		var asar = vfs.src(opts.asar).pipe(rename(asarPath));
+
+		src = pass.pipe(es.mapSync(function(f) {
+			console.log(f.relative);
+			if (f.relative.indexOf('/app/') === -1) {
+				return f;
+			}
+		}));
+
+		return es.duplex(pass, es.merge(src, asar));
+
+	} else {
+		src = es.through();
+		return es.duplex(pass, src);
+	}
+}
+
 exports.patch = function(opts) {
 	var pass = es.through();
 
@@ -120,6 +144,7 @@ exports.patch = function(opts) {
 		.pipe(removeDefaultApp())
 		.pipe(patchIcon(opts))
 		.pipe(removeFiles())
+		.pipe(useAsar(opts))
 		.pipe(patchInfoPlist(opts))
 		.pipe(renameApp(opts));
 
