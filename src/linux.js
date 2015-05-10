@@ -6,6 +6,7 @@ var rename = require('gulp-rename');
 var util = require('./util');
 
 exports.getAppPath = function(opts) {
+	if (opts.asar) return 'resources';
 	return 'resources/app';
 };
 
