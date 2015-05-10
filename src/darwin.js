@@ -12,6 +12,7 @@ function getAppName(opts) {
 };
 
 exports.getAppPath = function(opts) {
+	if (opts.asar) return getAppName(opts) + '/Contents/Resources';
 	return getAppName(opts) + '/Contents/Resources/app';
 };
 

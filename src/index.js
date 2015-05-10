@@ -9,7 +9,7 @@ var download = require('./download');
 
 function moveApp(platform, opts) {
 	var appPath = platform.getAppPath(opts);
-	
+
 	return rename(function (path) {
 		path.dirname = appPath + (path.dirname === '.' ? '' : '/' + path.dirname);
 	});
@@ -42,7 +42,11 @@ function _atomshell(opts) {
 			return;
 		}
 
-		buffer.push(f);
+		if (opts.asar && f.relative === 'package.json'){
+			// Do Nothing
+		} else {
+			buffer.push(f);
+		}
 
 		if (f.relative !== 'package.json') {
 			return;
