@@ -15,7 +15,7 @@ exports.getAppPath = function(opts) {
 
 function patchExecutable(opts) {
 	return es.map(function (f, cb) {
-		if (f.relative !== 'electron.exe' || process.platform !== 'win32') {
+		if (f.relative !== 'electron.exe') {
 			return cb(null, f);
 		}
 
